@@ -3,6 +3,7 @@ import serial
 
 def main():
     #Prase arguments
+    #python programmer_stm32fserial.py --hexfile PATHTOFIRMWARE --port /dev/ttyUSBX
     parser = argparse.ArgumentParser(description= "CWSTM32FFlasher")
     parser.add_argument('--hexfile', required=True, help="path to hex to flash")
     parser.add_argument('--port', required=True, help="Port where STM32F is connected")
