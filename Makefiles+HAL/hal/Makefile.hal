@@ -1,0 +1,58 @@
+# SOME BULLSHIT ABOUT THE PATH NOT WORKING
+HALPATH = ./stm32f4
+VPATH = ./:$(HALPATH):$(HALPATH)/CMSIS/Include:$(HALPATH)/CMSIS/Device/ST/STM32F4xx/Include:$(HALPATH)/Legacy
+
+# Processor frequency (external freq-in)
+ifndef F_CPU
+F_CPU = 7372800
+endif
+
+# Default include directories
+EXTRAINCDIRS += $(HALPATH)
+
+# Define the platform list and platform-specific settings
+PLATFORM_LIST = CW308_CC2538 CW301_AVR CW303 CW304 CW308_MEGARF CW308_SAM4L \
+    CW308_STM32F0 CW308_STM32F1 CW308_STM32F2 CW308_STM32F3 CW308_STM32F4 CW308_K24F \
+    CW308_NRF52 CW308_AURIX CW308_SAML11 CW308_EFM32TG11B CWLITEARM CWLITEXMEGA CWNANO CW308_K82F \
+    CW308_PSOC62 CW308_IMXRT1062 CW308_FE310 CW308_EFR32MG21A CW308_EFM32GG11 CW308_STM32L5 CW308_NEORV32\
+    CW308_SAM4S CW305_IBEX
+
+define KNOWN_PLATFORMS
+# (Platform descriptions...)
+endef
+
+PLTNAME = Unknown Platform
+
+# COMBINED MAKEFILE.STM32F AND MAKEFILE.HAL TOGETHER BECAUSE SEPARATELY IT DIDN'T WORK
+ifneq ($(MAKECMDGOALS),clean)
+    ifeq ($(PLATFORM),CW308_STM32F4)
+        HAL = stm32f4
+        PLTNAME = CW308T: STM32F4 Target
+        HAL_TYPE = HAL_stm32f4
+        INCLUDES += -I$(HALPATH)/stm32f4
+        CDEFS += -DHAL_TYPE=$(HAL_TYPE) -DPLATFORM=$(PLATFORM)
+        CFLAGS += $(CDEFS)
+        
+        # Append specific sources for STM32F4
+        SRC += stm32f4_hal.c stm32f4_hal_lowlevel.c stm32f4_sysmem.c stm32f4xx_hal_rng.c
+        ASRC += stm32f4_startup.S
+
+        # Specific compiler and linker flags
+        MCU_FLAGS = -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -fmessage-length=0 -ffunction-sections
+        ifeq ($(FPUUSE),)
+            CFLAGS += $(MCU_FLAGS)
+            CPPFLAGS += $(MCU_FLAGS)
+            ASFLAGS += $(MCU_FLAGS)
+        else
+            CFLAGS += -mfpu=fpv4-sp-d16
+            CPPFLAGS += -mfpu=fpv4-sp-d16
+            ASFLAGS += -mfpu=fpv4-sp-d16
+        endif
+
+        CDEFS += -DSTM32F415RGTx -DSTM32F4 -DSTM32 -DDEBUG -DSTM32F415xx
+        CPPDEFS += $(CDEFS)
+
+        LDFLAGS += --specs=nosys.specs -T $(HALPATH)/LinkerScript.ld -Wl,--gc-sections -lm
+    endif
+endif
+
