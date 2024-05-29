@@ -85,6 +85,8 @@ void testXTS(XTSCommon *cipher, const struct TestVector *test) {
 
 int main() {
     
+    //NO MAKE FILE XD
+    //g++ -o xts_test main.cpp AESCommon.cpp AES128.cpp XTS.cpp BlockCipher.cpp Crypto.cpp GF128.cpp -std=c++11
     xtsaes128 = new XTS<AES128>();
     testXTS(xtsaes128, &testVectorXTSAES128_1);
     return 0;
