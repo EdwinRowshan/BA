@@ -2,7 +2,9 @@ import chipwhisperer as cw
 import numpy as np
 import time
 
-PLATFORM = CW308_STM32F4
+# PLATFORM = CW308_STM32F4
+firmware_path = "./Makefiles+HAL/basic-passwdcheck.hex"
+
 
 try:
     if not scope.connectStatus:
@@ -32,7 +34,7 @@ def reset_target(scope):
     time.sleep(0.05)
 
 #FLASH FIRMWARE HERE INSTEAD OF USING SELF WRITTEN FLASHER
-cw.program_target(scope, prog, "PATH OF FIRMWARE".format(PLATFORM))
+cw.program_target(scope, prog, firmware_path)
 
 def cap_pass_trace(pass_guess):
     reset_target(scope)
