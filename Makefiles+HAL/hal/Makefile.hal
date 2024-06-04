@@ -44,9 +44,9 @@ ifneq ($(MAKECMDGOALS),clean)
             CPPFLAGS += $(MCU_FLAGS)
             ASFLAGS += $(MCU_FLAGS)
         else
-            CFLAGS += -mfpu=fpv4-sp-d16
-            CPPFLAGS += -mfpu=fpv4-sp-d16
-            ASFLAGS += -mfpu=fpv4-sp-d16
+            CFLAGS += -mthumb -mfloat-abi=soft -fmessage-length=0 -ffunction-sections
+            CPPFLAGS += -mthumb -mfloat-abi=soft -fmessage-length=0 -ffunction-sections
+            ASFLAGS += -mthumb -mfloat-abi=soft -fmessage-length=0 -ffunction-sections
         endif
 
         CDEFS += -DSTM32F415RGTx -DSTM32F4 -DSTM32 -DDEBUG -DSTM32F415xx
