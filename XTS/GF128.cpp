@@ -23,6 +23,8 @@
 #include "GF128.h"
 #include "EndianUtil.h"
 #include <string.h>
+#include <cstdint>
+#include <cstring>
 
 /**
  * \class GF128 GF128.h <GF128.h>
@@ -554,7 +556,7 @@ void GF128::dblXTS(uint32_t V[4])
         : "r16", "r17", "r18", "r19", "r20"
     );
 #else
-    uint32_t V0 = le32toh(V[0]);
+   /* uint32_t V0 = le32toh(V[0]);
     uint32_t V1 = le32toh(V[1]);
     uint32_t V2 = le32toh(V[2]);
     uint32_t V3 = le32toh(V[3]);
@@ -566,6 +568,38 @@ void GF128::dblXTS(uint32_t V[4])
     V[0] = htole32(V0);
     V[1] = htole32(V1);
     V[2] = htole32(V2);
-    V[3] = htole32(V3);
+    V[3] = htole32(V3); */
+
+    uint8_t T[16];
+    uint8_t Cin = 0, Cout;
+
+    // 32 bits / 8 = 4 bytes since 8 bits = 1 byte, therefore one single V index is 4 T index, as in V[0] = T[0]...T[3] etc
+    // Conversion vice versa is the same except memcpy locations are changed because 4 T index = 1 V index, T[0]...T[3] = V[0] 
+    
+    // Convert 4x uint32_t to 16x uint8_t
+    for (int i = 0; i < 4; i++) {
+        V[i] = le32toh(V[i]);
+        std::memcpy(&T[i * 4], &V[i], sizeof(uint32_t));
+    }
+    
+    // 16-byte left shifting
+    for (int i = 0; i < 16; i++) {
+        Cout = (T[i] >> 7) & 1;
+        T[i] = ((T[i] << 1) + Cin) & 0xFF;
+        Cin = Cout;
+    }
+    
+    // invert the bits if necessary
+    if (Cout == 1) {
+        T[0] ^= 0x87;
+    }
+    
+    // Convert 16x uint8_t to 4x uint32_t 
+    for (int i = 0; i < 4; i++) {
+        std::memcpy(&V[i], &T[i * 4], sizeof(uint32_t));
+        V[i] = htole32(V[i]);
+    }
+
+
 #endif
 }
