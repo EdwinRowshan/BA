@@ -374,11 +374,11 @@
  232 0034 0F48     		ldr	r0, .L7+8
  115:.././hal/stm32f4/stm32f4_hal.c ****   #if SS_VER==SS_VER_2_1
  116:.././hal/stm32f4/stm32f4_hal.c ****   UartHandle.Init.BaudRate   = 230400;
- 117:.././hal/stm32f4/stm32f4_hal.c ****   #else
- 118:.././hal/stm32f4/stm32f4_hal.c ****   UartHandle.Init.BaudRate   = 38400;
- 233              		.loc 1 118 30 view .LVU77
+ 233              		.loc 1 116 30 view .LVU77
  234 0036 1049     		ldr	r1, .L7+12
  235              	.LBB9:
+ 117:.././hal/stm32f4/stm32f4_hal.c ****   #else
+ 118:.././hal/stm32f4/stm32f4_hal.c ****   UartHandle.Init.BaudRate   = 38400;
  119:.././hal/stm32f4/stm32f4_hal.c ****   #endif
  120:.././hal/stm32f4/stm32f4_hal.c **** 	UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
  121:.././hal/stm32f4/stm32f4_hal.c **** 	UartHandle.Init.StopBits   = UART_STOPBITS_1;
@@ -389,9 +389,9 @@
  236              		.loc 1 125 2 view .LVU78
  237 0038 0295     		str	r5, [sp, #8]
  238              	.LBE9:
- 118:.././hal/stm32f4/stm32f4_hal.c ****   #endif
- 239              		.loc 1 118 30 view .LVU79
- 240 003a 4FF41643 		mov	r3, #38400
+ 116:.././hal/stm32f4/stm32f4_hal.c ****   #else
+ 239              		.loc 1 116 30 view .LVU79
+ 240 003a 4FF46133 		mov	r3, #230400
  241 003e C0E90313 		strd	r1, r3, [r0, #12]
  120:.././hal/stm32f4/stm32f4_hal.c **** 	UartHandle.Init.StopBits   = UART_STOPBITS_1;
  242              		.loc 1 120 2 is_stmt 1 view .LVU80
@@ -1213,66 +1213,65 @@
  911      00000000 
  912              		.text
  913              	.Letext0:
- 914              		.file 2 "/Users/eddy_/arm/arm-none-eabi/include/machine/_default_types.h"
- 915              		.file 3 "/Users/eddy_/arm/arm-none-eabi/include/sys/_stdint.h"
- 916              		.file 4 ".././hal/stm32f4/CMSIS/device/stm32f415xx.h"
- 917              		.file 5 ".././hal/stm32f4/CMSIS/device/stm32f4xx.h"
- 918              		.file 6 ".././hal/stm32f4/stm32f4xx_hal_def.h"
- 919              		.file 7 ".././hal/stm32f4/stm32f4xx_hal_rcc_ex.h"
- 920              		.file 8 ".././hal/stm32f4/stm32f4xx_hal_rcc.h"
- 921              		.file 9 ".././hal/stm32f4/stm32f4xx_hal_gpio.h"
- 922              		.file 10 ".././hal/stm32f4/stm32f4xx_hal_dma.h"
- 923              		.file 11 ".././hal/stm32f4/stm32f4xx_hal_uart.h"
- 924              		.file 12 ".././hal/stm32f4/stm32f4xx_hal_cryp.h"
- 925              		.file 13 ".././hal/stm32f4/stm32f4xx_hal_rng.h"
+ 914              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 915              		.file 3 ".././hal/stm32f4/CMSIS/device/stm32f415xx.h"
+ 916              		.file 4 ".././hal/stm32f4/CMSIS/device/stm32f4xx.h"
+ 917              		.file 5 ".././hal/stm32f4/stm32f4xx_hal_def.h"
+ 918              		.file 6 ".././hal/stm32f4/stm32f4xx_hal_rcc_ex.h"
+ 919              		.file 7 ".././hal/stm32f4/stm32f4xx_hal_rcc.h"
+ 920              		.file 8 ".././hal/stm32f4/stm32f4xx_hal_gpio.h"
+ 921              		.file 9 ".././hal/stm32f4/stm32f4xx_hal_dma.h"
+ 922              		.file 10 ".././hal/stm32f4/stm32f4xx_hal_uart.h"
+ 923              		.file 11 ".././hal/stm32f4/stm32f4xx_hal_cryp.h"
+ 924              		.file 12 ".././hal/stm32f4/stm32f4xx_hal_rng.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f4_hal.c
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:16     .text.platform_init:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:24     .text.platform_init:0000000000000000 platform_init
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:145    .text.platform_init:0000000000000074 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:152    .text.init_uart:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:159    .text.init_uart:0000000000000000 init_uart
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:288    .text.init_uart:000000000000006c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:296    .text.trigger_setup:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:303    .text.trigger_setup:0000000000000000 trigger_setup
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:370    .text.trigger_setup:0000000000000038 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:376    .text.trigger_high:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:383    .text.trigger_high:0000000000000000 trigger_high
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:399    .text.trigger_high:000000000000000c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:404    .text.trigger_low:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:411    .text.trigger_low:0000000000000000 trigger_low
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:427    .text.trigger_low:000000000000000c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:432    .text.getch:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:439    .text.getch:0000000000000000 getch
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:479    .text.getch:0000000000000020 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:484    .text.putch:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:491    .text.putch:0000000000000000 putch
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:525    .text.putch:000000000000001c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:530    .text.get_rand:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:537    .text.get_rand:0000000000000000 get_rand
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:588    .text.get_rand:000000000000001c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:593    .text.HW_AES128_LoadKey:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:600    .text.HW_AES128_LoadKey:0000000000000000 HW_AES128_LoadKey
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:646    .text.HW_AES128_LoadKey:0000000000000014 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:651    .text.HW_AES128_Init:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:658    .text.HW_AES128_Init:0000000000000000 HW_AES128_Init
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:729    .text.HW_AES128_Init:0000000000000040 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:736    .text.HW_AES128_Enc_pretrigger:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:743    .text.HW_AES128_Enc_pretrigger:0000000000000000 HW_AES128_Enc_pretrigger
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:760    .text.HW_AES128_Enc_pretrigger:0000000000000008 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:765    .text.HW_AES128_Enc:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:772    .text.HW_AES128_Enc:0000000000000000 HW_AES128_Enc
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:807    .text.HW_AES128_Enc:000000000000001c $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:812    .text.HW_AES128_Enc_posttrigger:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:819    .text.HW_AES128_Enc_posttrigger:0000000000000000 HW_AES128_Enc_posttrigger
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:834    .text.HW_AES128_Dec:0000000000000000 $t
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:841    .text.HW_AES128_Dec:0000000000000000 HW_AES128_Dec
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:886    .text.HW_AES128_Dec:0000000000000024 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:910    .bss:000000000000008c hw_key
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:902    .bss:000000000000000c UartHandle
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:898    .bss:0000000000000000 RngHandle
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:894    .bss:0000000000000000 $d
-/var/folders/k6/20g8yg0d333_shmzvnmp74nc0000gn/T//ccvxOElB.s:906    .bss:000000000000004c cryp
+     /tmp/ccEi0GBR.s:16     .text.platform_init:0000000000000000 $t
+     /tmp/ccEi0GBR.s:24     .text.platform_init:0000000000000000 platform_init
+     /tmp/ccEi0GBR.s:145    .text.platform_init:0000000000000074 $d
+     /tmp/ccEi0GBR.s:152    .text.init_uart:0000000000000000 $t
+     /tmp/ccEi0GBR.s:159    .text.init_uart:0000000000000000 init_uart
+     /tmp/ccEi0GBR.s:288    .text.init_uart:000000000000006c $d
+     /tmp/ccEi0GBR.s:296    .text.trigger_setup:0000000000000000 $t
+     /tmp/ccEi0GBR.s:303    .text.trigger_setup:0000000000000000 trigger_setup
+     /tmp/ccEi0GBR.s:370    .text.trigger_setup:0000000000000038 $d
+     /tmp/ccEi0GBR.s:376    .text.trigger_high:0000000000000000 $t
+     /tmp/ccEi0GBR.s:383    .text.trigger_high:0000000000000000 trigger_high
+     /tmp/ccEi0GBR.s:399    .text.trigger_high:000000000000000c $d
+     /tmp/ccEi0GBR.s:404    .text.trigger_low:0000000000000000 $t
+     /tmp/ccEi0GBR.s:411    .text.trigger_low:0000000000000000 trigger_low
+     /tmp/ccEi0GBR.s:427    .text.trigger_low:000000000000000c $d
+     /tmp/ccEi0GBR.s:432    .text.getch:0000000000000000 $t
+     /tmp/ccEi0GBR.s:439    .text.getch:0000000000000000 getch
+     /tmp/ccEi0GBR.s:479    .text.getch:0000000000000020 $d
+     /tmp/ccEi0GBR.s:484    .text.putch:0000000000000000 $t
+     /tmp/ccEi0GBR.s:491    .text.putch:0000000000000000 putch
+     /tmp/ccEi0GBR.s:525    .text.putch:000000000000001c $d
+     /tmp/ccEi0GBR.s:530    .text.get_rand:0000000000000000 $t
+     /tmp/ccEi0GBR.s:537    .text.get_rand:0000000000000000 get_rand
+     /tmp/ccEi0GBR.s:588    .text.get_rand:000000000000001c $d
+     /tmp/ccEi0GBR.s:593    .text.HW_AES128_LoadKey:0000000000000000 $t
+     /tmp/ccEi0GBR.s:600    .text.HW_AES128_LoadKey:0000000000000000 HW_AES128_LoadKey
+     /tmp/ccEi0GBR.s:646    .text.HW_AES128_LoadKey:0000000000000014 $d
+     /tmp/ccEi0GBR.s:651    .text.HW_AES128_Init:0000000000000000 $t
+     /tmp/ccEi0GBR.s:658    .text.HW_AES128_Init:0000000000000000 HW_AES128_Init
+     /tmp/ccEi0GBR.s:729    .text.HW_AES128_Init:0000000000000040 $d
+     /tmp/ccEi0GBR.s:736    .text.HW_AES128_Enc_pretrigger:0000000000000000 $t
+     /tmp/ccEi0GBR.s:743    .text.HW_AES128_Enc_pretrigger:0000000000000000 HW_AES128_Enc_pretrigger
+     /tmp/ccEi0GBR.s:760    .text.HW_AES128_Enc_pretrigger:0000000000000008 $d
+     /tmp/ccEi0GBR.s:765    .text.HW_AES128_Enc:0000000000000000 $t
+     /tmp/ccEi0GBR.s:772    .text.HW_AES128_Enc:0000000000000000 HW_AES128_Enc
+     /tmp/ccEi0GBR.s:807    .text.HW_AES128_Enc:000000000000001c $d
+     /tmp/ccEi0GBR.s:812    .text.HW_AES128_Enc_posttrigger:0000000000000000 $t
+     /tmp/ccEi0GBR.s:819    .text.HW_AES128_Enc_posttrigger:0000000000000000 HW_AES128_Enc_posttrigger
+     /tmp/ccEi0GBR.s:834    .text.HW_AES128_Dec:0000000000000000 $t
+     /tmp/ccEi0GBR.s:841    .text.HW_AES128_Dec:0000000000000000 HW_AES128_Dec
+     /tmp/ccEi0GBR.s:886    .text.HW_AES128_Dec:0000000000000024 $d
+     /tmp/ccEi0GBR.s:910    .bss:000000000000008c hw_key
+     /tmp/ccEi0GBR.s:902    .bss:000000000000000c UartHandle
+     /tmp/ccEi0GBR.s:898    .bss:0000000000000000 RngHandle
+     /tmp/ccEi0GBR.s:894    .bss:0000000000000000 $d
+     /tmp/ccEi0GBR.s:906    .bss:000000000000004c cryp
 
 UNDEFINED SYMBOLS
 HAL_RCC_OscConfig

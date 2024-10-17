@@ -28,13 +28,21 @@
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
+CC = arm-none-eabi-gcc
+CXX = arm-none-eabi-g++
+
+CFLAGS += -Wall -Wextra -std=gnu11  # for C files
+CXXFLAGS += -Wall -Wextra -std=c++11  # for C++ files
+
 # Target file name (without extension).
 # This is the name of the compiled .hex file.
 TARGET = main
 
 # List C source files here.
 # Header files (.h) are automatically pulled in.
-SRC += main.cpp BlockCipher.cpp Crypto.cpp GF128.cpp XTS.cpp AES128.cpp AESCommon.cpp 
+CPPSRC += main.cpp BlockCipher.cpp Crypto.cpp GF128.cpp XTS.cpp AES128.cpp AESCommon.cpp
+#SRC += ../simpleserial/simpleserial.c
+
 
 # -----------------------------------------------------------------------------
 ifeq ($(CRYPTO_OPTIONS),)

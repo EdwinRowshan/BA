@@ -1,0 +1,1043 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 4
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"simpleserial-glitch.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.glitch_loop,"ax",%progbits
+  16              		.align	1
+  17              		.global	glitch_loop
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	glitch_loop:
+  25              	.LVL0:
+  26              	.LFB2:
+  27              		.file 1 "simpleserial-glitch.c"
+   1:simpleserial-glitch.c **** /*
+   2:simpleserial-glitch.c ****     This file is part of the ChipWhisperer Example Targets
+   3:simpleserial-glitch.c ****     Copyright (C) 2012-2020 NewAE Technology Inc.
+   4:simpleserial-glitch.c **** 
+   5:simpleserial-glitch.c ****     This program is free software: you can redistribute it and/or modify
+   6:simpleserial-glitch.c ****     it under the terms of the GNU General Public License as published by
+   7:simpleserial-glitch.c ****     the Free Software Foundation, either version 3 of the License, or
+   8:simpleserial-glitch.c ****     (at your option) any later version.
+   9:simpleserial-glitch.c **** 
+  10:simpleserial-glitch.c ****     This program is distributed in the hope that it will be useful,
+  11:simpleserial-glitch.c ****     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:simpleserial-glitch.c ****     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:simpleserial-glitch.c ****     GNU General Public License for more details.
+  14:simpleserial-glitch.c **** 
+  15:simpleserial-glitch.c ****     You should have received a copy of the GNU General Public License
+  16:simpleserial-glitch.c ****     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:simpleserial-glitch.c **** */
+  18:simpleserial-glitch.c **** 
+  19:simpleserial-glitch.c **** #include "hal.h"
+  20:simpleserial-glitch.c **** #include <stdint.h>
+  21:simpleserial-glitch.c **** #include <stdlib.h>
+  22:simpleserial-glitch.c **** 
+  23:simpleserial-glitch.c **** #include "simpleserial.h"
+  24:simpleserial-glitch.c **** 
+  25:simpleserial-glitch.c **** //uint8_t infinite_loop(uint8_t* in);
+  26:simpleserial-glitch.c **** //uint8_t glitch_loop(uint8_t* in);
+  27:simpleserial-glitch.c **** //uint8_t password(uint8_t* pw);
+  28:simpleserial-glitch.c **** 
+  29:simpleserial-glitch.c **** // Make sure no optimization happens for demo glitch logic.
+  30:simpleserial-glitch.c **** // #pragma GCC push_options
+  31:simpleserial-glitch.c **** // #pragma GCC optimize ("O0")
+  32:simpleserial-glitch.c **** 
+  33:simpleserial-glitch.c **** #if SS_VER == SS_VER_2_1
+  34:simpleserial-glitch.c **** uint8_t glitch_loop(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t* in)
+  35:simpleserial-glitch.c **** #else
+  36:simpleserial-glitch.c **** uint8_t glitch_loop(uint8_t* in, uint8_t len)
+  37:simpleserial-glitch.c **** #endif
+  38:simpleserial-glitch.c **** {
+  28              		.loc 1 38 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  39:simpleserial-glitch.c ****     volatile uint16_t i, j;
+  32              		.loc 1 39 5 view .LVU1
+  40:simpleserial-glitch.c ****     volatile uint32_t cnt;
+  33              		.loc 1 40 5 view .LVU2
+  41:simpleserial-glitch.c ****     cnt = 0;
+  34              		.loc 1 41 5 view .LVU3
+  38:simpleserial-glitch.c ****     volatile uint16_t i, j;
+  35              		.loc 1 38 1 is_stmt 0 view .LVU4
+  36 0000 13B5     		push	{r0, r1, r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 41 9 view .LVU5
+  42 0002 0024     		movs	r4, #0
+  43 0004 0194     		str	r4, [sp, #4]
+  42:simpleserial-glitch.c ****     trigger_high();
+  44              		.loc 1 42 5 is_stmt 1 view .LVU6
+  45 0006 FFF7FEFF 		bl	trigger_high
+  46              	.LVL1:
+  43:simpleserial-glitch.c ****     for(i=0; i<50; i++){
+  47              		.loc 1 43 5 view .LVU7
+  48              		.loc 1 43 10 is_stmt 0 view .LVU8
+  49 000a ADF80040 		strh	r4, [sp]	@ movhi
+  50              	.L2:
+  51              		.loc 1 43 14 is_stmt 1 discriminator 1 view .LVU9
+  52              		.loc 1 43 15 is_stmt 0 discriminator 1 view .LVU10
+  53 000e BDF80030 		ldrh	r3, [sp]
+  54 0012 9BB2     		uxth	r3, r3
+  55              		.loc 1 43 5 discriminator 1 view .LVU11
+  56 0014 312B     		cmp	r3, #49
+  57 0016 0FD9     		bls	.L5
+  44:simpleserial-glitch.c ****         for(j=0; j<50; j++){
+  45:simpleserial-glitch.c ****             cnt++;
+  46:simpleserial-glitch.c ****         }
+  47:simpleserial-glitch.c ****     }
+  48:simpleserial-glitch.c ****     trigger_low();
+  58              		.loc 1 48 5 is_stmt 1 view .LVU12
+  59 0018 FFF7FEFF 		bl	trigger_low
+  60              	.LVL2:
+  49:simpleserial-glitch.c ****     simpleserial_put('r', 4, (uint8_t*)&cnt);
+  61              		.loc 1 49 5 view .LVU13
+  62 001c 01AA     		add	r2, sp, #4
+  63 001e 0421     		movs	r1, #4
+  64 0020 7220     		movs	r0, #114
+  65 0022 FFF7FEFF 		bl	simpleserial_put
+  66              	.LVL3:
+  50:simpleserial-glitch.c **** #if SS_VER == SS_VER_2_1
+  51:simpleserial-glitch.c ****     return (cnt != 2500) ? 0x10 : 0x00;
+  67              		.loc 1 51 5 view .LVU14
+  68              		.loc 1 51 17 is_stmt 0 view .LVU15
+  69 0026 0198     		ldr	r0, [sp, #4]
+  52:simpleserial-glitch.c **** #else
+  53:simpleserial-glitch.c ****     return (cnt != 2500);
+  54:simpleserial-glitch.c **** #endif
+  55:simpleserial-glitch.c **** }
+  70              		.loc 1 55 1 view .LVU16
+  71 0028 40F6C413 		movw	r3, #2500
+  72 002c 9842     		cmp	r0, r3
+  73 002e 14BF     		ite	ne
+  74 0030 1020     		movne	r0, #16
+  75 0032 0020     		moveq	r0, #0
+  76 0034 02B0     		add	sp, sp, #8
+  77              	.LCFI1:
+  78              		.cfi_remember_state
+  79              		.cfi_def_cfa_offset 8
+  80              		@ sp needed
+  81 0036 10BD     		pop	{r4, pc}
+  82              	.L5:
+  83              	.LCFI2:
+  84              		.cfi_restore_state
+  44:simpleserial-glitch.c ****             cnt++;
+  85              		.loc 1 44 9 is_stmt 1 view .LVU17
+  44:simpleserial-glitch.c ****             cnt++;
+  86              		.loc 1 44 14 is_stmt 0 view .LVU18
+  87 0038 ADF80240 		strh	r4, [sp, #2]	@ movhi
+  88              	.L3:
+  44:simpleserial-glitch.c ****             cnt++;
+  89              		.loc 1 44 18 is_stmt 1 discriminator 1 view .LVU19
+  44:simpleserial-glitch.c ****             cnt++;
+  90              		.loc 1 44 19 is_stmt 0 discriminator 1 view .LVU20
+  91 003c BDF80230 		ldrh	r3, [sp, #2]
+  92 0040 9BB2     		uxth	r3, r3
+  44:simpleserial-glitch.c ****             cnt++;
+  93              		.loc 1 44 9 discriminator 1 view .LVU21
+  94 0042 312B     		cmp	r3, #49
+  95 0044 06D9     		bls	.L4
+  43:simpleserial-glitch.c ****         for(j=0; j<50; j++){
+  96              		.loc 1 43 20 is_stmt 1 discriminator 2 view .LVU22
+  43:simpleserial-glitch.c ****         for(j=0; j<50; j++){
+  97              		.loc 1 43 21 is_stmt 0 discriminator 2 view .LVU23
+  98 0046 BDF80030 		ldrh	r3, [sp]
+  99 004a 0133     		adds	r3, r3, #1
+ 100 004c 9BB2     		uxth	r3, r3
+ 101 004e ADF80030 		strh	r3, [sp]	@ movhi
+ 102 0052 DCE7     		b	.L2
+ 103              	.L4:
+  45:simpleserial-glitch.c ****         }
+ 104              		.loc 1 45 13 is_stmt 1 discriminator 3 view .LVU24
+  45:simpleserial-glitch.c ****         }
+ 105              		.loc 1 45 16 is_stmt 0 discriminator 3 view .LVU25
+ 106 0054 019B     		ldr	r3, [sp, #4]
+ 107 0056 0133     		adds	r3, r3, #1
+ 108 0058 0193     		str	r3, [sp, #4]
+  44:simpleserial-glitch.c ****             cnt++;
+ 109              		.loc 1 44 24 is_stmt 1 discriminator 3 view .LVU26
+  44:simpleserial-glitch.c ****             cnt++;
+ 110              		.loc 1 44 25 is_stmt 0 discriminator 3 view .LVU27
+ 111 005a BDF80230 		ldrh	r3, [sp, #2]
+ 112 005e 0133     		adds	r3, r3, #1
+ 113 0060 9BB2     		uxth	r3, r3
+ 114 0062 ADF80230 		strh	r3, [sp, #2]	@ movhi
+ 115 0066 E9E7     		b	.L3
+ 116              		.cfi_endproc
+ 117              	.LFE2:
+ 119              		.section	.text.glitch_comparison,"ax",%progbits
+ 120              		.align	1
+ 121              		.global	glitch_comparison
+ 122              		.syntax unified
+ 123              		.thumb
+ 124              		.thumb_func
+ 125              		.fpu softvfp
+ 127              	glitch_comparison:
+ 128              	.LVL4:
+ 129              	.LFB3:
+  56:simpleserial-glitch.c **** 
+  57:simpleserial-glitch.c **** #if SS_VER == SS_VER_2_1
+  58:simpleserial-glitch.c **** uint8_t glitch_comparison(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t* in)
+  59:simpleserial-glitch.c **** #else
+  60:simpleserial-glitch.c **** uint8_t glitch_comparison(uint8_t* in, uint8_t len)
+  61:simpleserial-glitch.c **** #endif
+  62:simpleserial-glitch.c **** {
+ 130              		.loc 1 62 1 is_stmt 1 view -0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 8
+ 133              		@ frame_needed = 0, uses_anonymous_args = 0
+  63:simpleserial-glitch.c ****     uint8_t ok = 5;
+ 134              		.loc 1 63 5 view .LVU29
+  62:simpleserial-glitch.c ****     uint8_t ok = 5;
+ 135              		.loc 1 62 1 is_stmt 0 view .LVU30
+ 136 0000 13B5     		push	{r0, r1, r4, lr}
+ 137              	.LCFI3:
+ 138              		.cfi_def_cfa_offset 16
+ 139              		.cfi_offset 4, -8
+ 140              		.cfi_offset 14, -4
+  62:simpleserial-glitch.c ****     uint8_t ok = 5;
+ 141              		.loc 1 62 1 view .LVU31
+ 142 0002 1C46     		mov	r4, r3
+ 143              		.loc 1 63 13 view .LVU32
+ 144 0004 0523     		movs	r3, #5
+ 145              	.LVL5:
+ 146              		.loc 1 63 13 view .LVU33
+ 147 0006 8DF80730 		strb	r3, [sp, #7]
+  64:simpleserial-glitch.c ****     trigger_high();
+ 148              		.loc 1 64 5 is_stmt 1 view .LVU34
+ 149 000a FFF7FEFF 		bl	trigger_high
+ 150              	.LVL6:
+  65:simpleserial-glitch.c ****     if (*in == 0xA2){
+ 151              		.loc 1 65 5 view .LVU35
+ 152              		.loc 1 65 8 is_stmt 0 view .LVU36
+ 153 000e 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 154 0010 A3F1A202 		sub	r2, r3, #162
+ 155 0014 5342     		rsbs	r3, r2, #0
+ 156 0016 5341     		adcs	r3, r3, r2
+ 157 0018 8DF80730 		strb	r3, [sp, #7]
+  66:simpleserial-glitch.c ****         ok = 1;
+  67:simpleserial-glitch.c ****     } else {
+  68:simpleserial-glitch.c ****         ok = 0;
+  69:simpleserial-glitch.c ****     }
+  70:simpleserial-glitch.c ****     trigger_low();
+ 158              		.loc 1 70 5 is_stmt 1 view .LVU37
+ 159 001c FFF7FEFF 		bl	trigger_low
+ 160              	.LVL7:
+  71:simpleserial-glitch.c ****     simpleserial_put('r', 1, (uint8_t*)&ok);
+ 161              		.loc 1 71 5 view .LVU38
+ 162 0020 0DF10702 		add	r2, sp, #7
+ 163 0024 0121     		movs	r1, #1
+ 164 0026 7220     		movs	r0, #114
+ 165 0028 FFF7FEFF 		bl	simpleserial_put
+ 166              	.LVL8:
+  72:simpleserial-glitch.c ****     return 0x00;
+ 167              		.loc 1 72 5 view .LVU39
+  73:simpleserial-glitch.c **** }
+ 168              		.loc 1 73 1 is_stmt 0 view .LVU40
+ 169 002c 0020     		movs	r0, #0
+ 170 002e 02B0     		add	sp, sp, #8
+ 171              	.LCFI4:
+ 172              		.cfi_def_cfa_offset 8
+ 173              		@ sp needed
+ 174 0030 10BD     		pop	{r4, pc}
+ 175              		.loc 1 73 1 view .LVU41
+ 176              		.cfi_endproc
+ 177              	.LFE3:
+ 179              		.section	.rodata.str1.1,"aMS",%progbits,1
+ 180              	.LC0:
+ 181 0000 746F7563 		.ascii	"touch\000"
+ 181      6800
+ 182              		.section	.text.password,"ax",%progbits
+ 183              		.align	1
+ 184              		.global	password
+ 185              		.syntax unified
+ 186              		.thumb
+ 187              		.thumb_func
+ 188              		.fpu softvfp
+ 190              	password:
+ 191              	.LVL9:
+ 192              	.LFB4:
+  74:simpleserial-glitch.c **** 
+  75:simpleserial-glitch.c **** #if SS_VER == SS_VER_2_1
+  76:simpleserial-glitch.c **** uint8_t password(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t* pw)
+  77:simpleserial-glitch.c **** #else
+  78:simpleserial-glitch.c **** uint8_t password(uint8_t* pw, uint8_t len)
+  79:simpleserial-glitch.c **** #endif
+  80:simpleserial-glitch.c **** {
+ 193              		.loc 1 80 1 is_stmt 1 view -0
+ 194              		.cfi_startproc
+ 195              		@ args = 0, pretend = 0, frame = 16
+ 196              		@ frame_needed = 0, uses_anonymous_args = 0
+  81:simpleserial-glitch.c ****     char passwd[] = "touch";
+ 197              		.loc 1 81 5 view .LVU43
+  80:simpleserial-glitch.c ****     char passwd[] = "touch";
+ 198              		.loc 1 80 1 is_stmt 0 view .LVU44
+ 199 0000 7FB5     		push	{r0, r1, r2, r3, r4, r5, r6, lr}
+ 200              	.LCFI5:
+ 201              		.cfi_def_cfa_offset 32
+ 202              		.cfi_offset 4, -16
+ 203              		.cfi_offset 5, -12
+ 204              		.cfi_offset 6, -8
+ 205              		.cfi_offset 14, -4
+  80:simpleserial-glitch.c ****     char passwd[] = "touch";
+ 206              		.loc 1 80 1 view .LVU45
+ 207 0002 1C46     		mov	r4, r3
+ 208              		.loc 1 81 10 view .LVU46
+ 209 0004 144B     		ldr	r3, .L17
+ 210              	.LVL10:
+ 211              		.loc 1 81 10 view .LVU47
+ 212 0006 1868     		ldr	r0, [r3]	@ unaligned
+ 213              	.LVL11:
+ 214              		.loc 1 81 10 view .LVU48
+ 215 0008 9B88     		ldrh	r3, [r3, #4]	@ unaligned
+ 216 000a ADF80C30 		strh	r3, [sp, #12]	@ unaligned
+  82:simpleserial-glitch.c ****     char passok = 1;
+ 217              		.loc 1 82 5 is_stmt 1 view .LVU49
+ 218              		.loc 1 82 10 is_stmt 0 view .LVU50
+ 219 000e 0123     		movs	r3, #1
+  81:simpleserial-glitch.c ****     char passwd[] = "touch";
+ 220              		.loc 1 81 10 view .LVU51
+ 221 0010 0290     		str	r0, [sp, #8]
+ 222              		.loc 1 82 10 view .LVU52
+ 223 0012 8DF80730 		strb	r3, [sp, #7]
+  83:simpleserial-glitch.c ****     int cnt;
+ 224              		.loc 1 83 5 is_stmt 1 view .LVU53
+  84:simpleserial-glitch.c **** 
+  85:simpleserial-glitch.c ****     trigger_high();
+ 225              		.loc 1 85 5 view .LVU54
+ 226 0016 FFF7FEFF 		bl	trigger_high
+ 227              	.LVL12:
+  86:simpleserial-glitch.c **** 
+  87:simpleserial-glitch.c ****     //Simple test - doesn't check for too-long password!
+  88:simpleserial-glitch.c ****     for(cnt = 0; cnt < 5; cnt++){
+ 228              		.loc 1 88 5 view .LVU55
+ 229              		.loc 1 88 18 view .LVU56
+ 230 001a 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 231 001e 611E     		subs	r1, r4, #1
+ 232 0020 02A8     		add	r0, sp, #8
+ 233 0022 0434     		adds	r4, r4, #4
+ 234              	.LVL13:
+  85:simpleserial-glitch.c **** 
+ 235              		.loc 1 85 5 is_stmt 0 view .LVU57
+ 236 0024 0022     		movs	r2, #0
+ 237              	.LVL14:
+ 238              	.L11:
+  89:simpleserial-glitch.c ****         if (pw[cnt] != passwd[cnt]){
+ 239              		.loc 1 89 9 is_stmt 1 view .LVU58
+ 240              		.loc 1 89 12 is_stmt 0 view .LVU59
+ 241 0026 11F8016F 		ldrb	r6, [r1, #1]!	@ zero_extendqisi2
+ 242              	.LVL15:
+ 243              		.loc 1 89 30 view .LVU60
+ 244 002a 10F8015B 		ldrb	r5, [r0], #1	@ zero_extendqisi2
+ 245              		.loc 1 89 12 view .LVU61
+ 246 002e AE42     		cmp	r6, r5
+ 247 0030 1CBF     		itt	ne
+ 248 0032 0122     		movne	r2, #1
+ 249 0034 0023     		movne	r3, #0
+  88:simpleserial-glitch.c ****         if (pw[cnt] != passwd[cnt]){
+ 250              		.loc 1 88 27 is_stmt 1 view .LVU62
+ 251              	.LVL16:
+  88:simpleserial-glitch.c ****         if (pw[cnt] != passwd[cnt]){
+ 252              		.loc 1 88 18 view .LVU63
+  88:simpleserial-glitch.c ****         if (pw[cnt] != passwd[cnt]){
+ 253              		.loc 1 88 5 is_stmt 0 view .LVU64
+ 254 0036 A142     		cmp	r1, r4
+ 255 0038 F5D1     		bne	.L11
+ 256 003a 0AB1     		cbz	r2, .L12
+ 257 003c 8DF80730 		strb	r3, [sp, #7]
+ 258              	.L12:
+  90:simpleserial-glitch.c ****             passok = 0;
+  91:simpleserial-glitch.c ****         }
+  92:simpleserial-glitch.c ****     }
+  93:simpleserial-glitch.c **** 
+  94:simpleserial-glitch.c ****     trigger_low();
+ 259              		.loc 1 94 5 is_stmt 1 view .LVU65
+ 260 0040 FFF7FEFF 		bl	trigger_low
+ 261              	.LVL17:
+  95:simpleserial-glitch.c **** 
+  96:simpleserial-glitch.c ****     simpleserial_put('r', 1, (uint8_t*)&passok);
+ 262              		.loc 1 96 5 view .LVU66
+ 263 0044 0DF10702 		add	r2, sp, #7
+ 264 0048 0121     		movs	r1, #1
+ 265 004a 7220     		movs	r0, #114
+ 266 004c FFF7FEFF 		bl	simpleserial_put
+ 267              	.LVL18:
+  97:simpleserial-glitch.c ****     return 0x00;
+ 268              		.loc 1 97 5 view .LVU67
+  98:simpleserial-glitch.c **** }
+ 269              		.loc 1 98 1 is_stmt 0 view .LVU68
+ 270 0050 0020     		movs	r0, #0
+ 271 0052 04B0     		add	sp, sp, #16
+ 272              	.LCFI6:
+ 273              		.cfi_def_cfa_offset 16
+ 274              		@ sp needed
+ 275 0054 70BD     		pop	{r4, r5, r6, pc}
+ 276              	.LVL19:
+ 277              	.L18:
+ 278              		.loc 1 98 1 view .LVU69
+ 279 0056 00BF     		.align	2
+ 280              	.L17:
+ 281 0058 00000000 		.word	.LC0
+ 282              		.cfi_endproc
+ 283              	.LFE4:
+ 285              		.section	.text.led_ok,"ax",%progbits
+ 286              		.align	1
+ 287              		.weak	led_ok
+ 288              		.syntax unified
+ 289              		.thumb
+ 290              		.thumb_func
+ 291              		.fpu softvfp
+ 293              	led_ok:
+ 294              	.LVL20:
+ 295              	.LFB0:
+ 296              		.file 2 ".././hal/hal.h"
+   1:.././hal/hal.h **** /*
+   2:.././hal/hal.h ****     This file is part of the ChipWhisperer Example Targets
+   3:.././hal/hal.h ****     Copyright (C) 2012-2015 NewAE Technology Inc.
+   4:.././hal/hal.h **** 
+   5:.././hal/hal.h ****     This program is free software: you can redistribute it and/or modify
+   6:.././hal/hal.h ****     it under the terms of the GNU General Public License as published by
+   7:.././hal/hal.h ****     the Free Software Foundation, either version 3 of the License, or
+   8:.././hal/hal.h ****     (at your option) any later version.
+   9:.././hal/hal.h **** 
+  10:.././hal/hal.h ****     This program is distributed in the hope that it will be useful,
+  11:.././hal/hal.h ****     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:.././hal/hal.h ****     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:.././hal/hal.h ****     GNU General Public License for more details.
+  14:.././hal/hal.h **** 
+  15:.././hal/hal.h ****     You should have received a copy of the GNU General Public License
+  16:.././hal/hal.h ****     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:.././hal/hal.h **** */
+  18:.././hal/hal.h **** 
+  19:.././hal/hal.h **** #ifndef HAL_H_
+  20:.././hal/hal.h **** #define HAL_H_
+  21:.././hal/hal.h **** 
+  22:.././hal/hal.h **** #include <stdint.h>
+  23:.././hal/hal.h **** 
+  24:.././hal/hal.h **** void platform_init(void);
+  25:.././hal/hal.h **** 
+  26:.././hal/hal.h **** //PLATFORM Define Types
+  27:.././hal/hal.h **** #define CW301_AVR      1
+  28:.././hal/hal.h **** #define CW301_XMEGA    2
+  29:.././hal/hal.h **** #define CW303          3
+  30:.././hal/hal.h **** #define CW304          4
+  31:.././hal/hal.h **** #define CW308_MEGARF   8
+  32:.././hal/hal.h **** #define CW308_PIC24FJ  10
+  33:.././hal/hal.h **** #define CW308_SAM4L    11
+  34:.././hal/hal.h **** #define CW308_SI4010   12
+  35:.././hal/hal.h **** #define CW308_MPC5748G 13
+  36:.././hal/hal.h **** #define CW308_STM32F0  14
+  37:.././hal/hal.h **** #define CW308_STM32F1  15
+  38:.././hal/hal.h **** #define CW308_STM32F2  16
+  39:.././hal/hal.h **** #define CW308_STM32F3  17
+  40:.././hal/hal.h **** #define CW308_STM32F4  18
+  41:.././hal/hal.h **** #define CW308_CC2538   19
+  42:.././hal/hal.h **** #define CW308_K24F     20
+  43:.././hal/hal.h **** #define CW308_NRF52840 21
+  44:.././hal/hal.h **** #define CW308_AURIX    22
+  45:.././hal/hal.h **** #define CW308_SAML11   23
+  46:.././hal/hal.h **** #define CW308_EFM32TG11B 24
+  47:.././hal/hal.h **** #define CW308_K82F     25
+  48:.././hal/hal.h **** #define CW308_LPC55S6X 26
+  49:.././hal/hal.h **** #define CW308_PSOC62   27
+  50:.././hal/hal.h **** #define CW308_IMXRT1062 28
+  51:.././hal/hal.h **** #define CW308_FE310    29
+  52:.././hal/hal.h **** #define CW308_EFR32MG21A  30
+  53:.././hal/hal.h **** #define CW308_EFM32GG11  31
+  54:.././hal/hal.h **** #define CW308_STM32L5  32
+  55:.././hal/hal.h **** #define CW308_STM32L4  33
+  56:.././hal/hal.h **** #define CW308_RX65N  34
+  57:.././hal/hal.h **** #define CW308_MPC5676R 35
+  58:.././hal/hal.h **** #define CW308_NEORV32  36
+  59:.././hal/hal.h **** #define CW305_IBEX  37
+  60:.././hal/hal.h **** 
+  61:.././hal/hal.h **** //HAL_TYPE Define Types
+  62:.././hal/hal.h **** #define HAL_avr      1
+  63:.././hal/hal.h **** #define HAL_xmega    2
+  64:.././hal/hal.h **** #define HAL_pic24f   3
+  65:.././hal/hal.h **** #define HAL_sam4l    4
+  66:.././hal/hal.h **** #define HAL_stm32f0  5
+  67:.././hal/hal.h **** #define HAL_stm32f1  6
+  68:.././hal/hal.h **** #define HAL_stm32f2  7
+  69:.././hal/hal.h **** #define HAL_stm32f3  8
+  70:.././hal/hal.h **** #define HAL_stm32f4  9
+  71:.././hal/hal.h **** #define HAL_cc2538   10
+  72:.././hal/hal.h **** #define HAL_k24f     11
+  73:.././hal/hal.h **** #define HAL_nrf52840 12
+  74:.././hal/hal.h **** #define HAL_stm32f0_nano 13
+  75:.././hal/hal.h **** #define HAL_aurix    14
+  76:.././hal/hal.h **** #define HAL_saml11   15
+  77:.././hal/hal.h **** #define HAL_efm32tg11b 16
+  78:.././hal/hal.h **** #define HAL_k82f     17
+  79:.././hal/hal.h **** #define HAL_lpc55s6x 18
+  80:.././hal/hal.h **** #define HAL_psoc62   19
+  81:.././hal/hal.h **** #define HAL_imxrt1062 20
+  82:.././hal/hal.h **** #define HAL_fe310    21
+  83:.././hal/hal.h **** #define HAL_efr32mg21a 22
+  84:.././hal/hal.h **** #define HAL_efm32gg11 23
+  85:.././hal/hal.h **** #define HAL_stm32l5 24
+  86:.././hal/hal.h **** #define HAL_stm32l4 25
+  87:.././hal/hal.h **** #define HAL_rx65n 26
+  88:.././hal/hal.h **** #define HAL_mpc5676r 27
+  89:.././hal/hal.h **** #define HAL_neorv32  28
+  90:.././hal/hal.h **** #define HAL_sam4s  29
+  91:.././hal/hal.h **** #define HAL_ibex  30
+  92:.././hal/hal.h **** 
+  93:.././hal/hal.h **** #if HAL_TYPE == HAL_avr
+  94:.././hal/hal.h ****     #include <avr/io.h>
+  95:.././hal/hal.h ****     #include <util/delay.h>
+  96:.././hal/hal.h ****     #include "avr/avr_hal.h"
+  97:.././hal/hal.h **** #elif HAL_TYPE == HAL_xmega
+  98:.././hal/hal.h ****     #include <avr/io.h>
+  99:.././hal/hal.h ****     #include <util/delay.h>
+ 100:.././hal/hal.h ****     #include "xmega/xmega_hal.h"
+ 101:.././hal/hal.h ****     #include "xmega/avr_compiler.h"
+ 102:.././hal/hal.h **** #elif HAL_TYPE == HAL_pic24f
+ 103:.././hal/hal.h ****     #include <xc.h>
+ 104:.././hal/hal.h ****     #include "pic24f/pic24f_hal.h"
+ 105:.././hal/hal.h ****     #include "pic24f/uart.h"
+ 106:.././hal/hal.h **** #elif HAL_TYPE == HAL_sam4l
+ 107:.././hal/hal.h ****     #include "sam4l/sam4l_hal.h"
+ 108:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f0
+ 109:.././hal/hal.h **** 	#include "stm32f0/stm32f0_hal.h"
+ 110:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f1
+ 111:.././hal/hal.h **** 	#include "stm32f1/stm32f1_hal.h"
+ 112:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f2
+ 113:.././hal/hal.h **** 	#include "stm32f2/stm32f2_hal.h"
+ 114:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f3
+ 115:.././hal/hal.h **** 	#include "stm32f3/stm32f3_hal.h"
+ 116:.././hal/hal.h **** 	#ifdef SECCAN
+ 117:.././hal/hal.h **** 		#include "stm32f3/stm32f3_hal_seccan.h"
+ 118:.././hal/hal.h **** 	#endif
+ 119:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f4
+ 120:.././hal/hal.h **** 	#include "stm32f4/stm32f4_hal.h"
+ 121:.././hal/hal.h **** #elif HAL_TYPE == HAL_cc2538
+ 122:.././hal/hal.h **** 	#include "cc2538/cc2538_hal.h"
+ 123:.././hal/hal.h **** #elif HAL_TYPE == HAL_k24f
+ 124:.././hal/hal.h ****     #include "k24f/k24f_hal.h"
+ 125:.././hal/hal.h **** #elif HAL_TYPE == HAL_k82f
+ 126:.././hal/hal.h **** #include "k82f/k82f_hal.h"
+ 127:.././hal/hal.h **** #elif HAL_TYPE == HAL_nrf52840
+ 128:.././hal/hal.h ****     #include "nrf52840/nrf52840_hal.h"   
+ 129:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32f0_nano
+ 130:.././hal/hal.h ****     #include "stm32f0/stm32f0_hal.h" 
+ 131:.././hal/hal.h ****     void led_error(unsigned int status);
+ 132:.././hal/hal.h ****     void led_ok(unsigned int status);
+ 133:.././hal/hal.h **** #elif HAL_TYPE == HAL_aurix
+ 134:.././hal/hal.h ****     #include "aurix/aurix_hal.h"
+ 135:.././hal/hal.h **** #elif HAL_TYPE == HAL_saml11
+ 136:.././hal/hal.h ****      #include "saml11/saml11_hal.h"
+ 137:.././hal/hal.h **** #elif HAL_TYPE == HAL_efm32tg11b
+ 138:.././hal/hal.h ****      #include "efm32tg11b/efm32tg11b_hal.h"
+ 139:.././hal/hal.h **** #elif HAL_TYPE == HAL_lpc55s6x
+ 140:.././hal/hal.h ****      #include "lpc55s6x/lpc55s6x_hal.h"
+ 141:.././hal/hal.h **** #elif HAL_TYPE == HAL_psoc62
+ 142:.././hal/hal.h ****     #include "psoc62/psoc62_hal.h"
+ 143:.././hal/hal.h **** #elif HAL_TYPE == HAL_imxrt1062
+ 144:.././hal/hal.h ****     #include "imxrt1062/imxrt1062_hal.h"
+ 145:.././hal/hal.h **** #elif HAL_TYPE == HAL_fe310
+ 146:.././hal/hal.h ****     #include "fe310/fe310_hal.h"
+ 147:.././hal/hal.h **** #elif HAL_TYPE == HAL_efr32mg21a
+ 148:.././hal/hal.h ****     #include "efr32mg21a/efr32mg21a_hal.h"
+ 149:.././hal/hal.h **** #elif HAL_TYPE == HAL_efm32gg11
+ 150:.././hal/hal.h ****     #include "efm32gg11/efm32gg11_hal.h"
+ 151:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32l5
+ 152:.././hal/hal.h ****     #include "stm32l5/stm32l5_hal.h"
+ 153:.././hal/hal.h **** #elif HAL_TYPE == HAL_stm32l4
+ 154:.././hal/hal.h ****     #include "stm32l4/stm32l4_hal.h"
+ 155:.././hal/hal.h **** #elif HAL_TYPE == HAL_rx65n
+ 156:.././hal/hal.h ****     #include "rx65n/rx65n_hal.h"
+ 157:.././hal/hal.h **** #elif HAL_TYPE == HAL_mpc5676r
+ 158:.././hal/hal.h ****     #include "mpc5676r/MPC5676R_hal.h"
+ 159:.././hal/hal.h **** #elif HAL_TYPE == HAL_neorv32
+ 160:.././hal/hal.h ****     #include "neorv32/neorv32_hal.h"
+ 161:.././hal/hal.h **** #elif HAL_TYPE == HAL_sam4s
+ 162:.././hal/hal.h ****     #include "sam4s/sam4s_hal.h"
+ 163:.././hal/hal.h **** #elif HAL_TYPE == HAL_ibex
+ 164:.././hal/hal.h ****     #include "ibex/ibex_hal.h"
+ 165:.././hal/hal.h **** #else
+ 166:.././hal/hal.h ****     #error "Unsupported HAL Type"
+ 167:.././hal/hal.h **** #endif
+ 168:.././hal/hal.h **** 
+ 169:.././hal/hal.h **** #if PLATFORM == CW308_MEGARF
+ 170:.././hal/hal.h ****     #undef trigger_setup
+ 171:.././hal/hal.h ****     #undef trigger_high
+ 172:.././hal/hal.h ****     #undef trigger_low
+ 173:.././hal/hal.h ****     #define trigger_setup() DDRD |= 0x02
+ 174:.././hal/hal.h ****     #define trigger_high()  PORTD |= 0x02
+ 175:.././hal/hal.h ****     #define trigger_low()   PORTD &= ~(0x02)
+ 176:.././hal/hal.h ****     
+ 177:.././hal/hal.h ****     #define HW_AES128_Init();      AES_CTRL = 0x00;
+ 178:.././hal/hal.h **** 
+ 179:.././hal/hal.h ****     #define HW_AES128_LoadKey(key);  for (uint8_t i = 0; i < 16; i++){ \
+ 180:.././hal/hal.h ****                                      AES_KEY = *(key+i); \
+ 181:.././hal/hal.h ****                                   }
+ 182:.././hal/hal.h **** 
+ 183:.././hal/hal.h ****     #define HW_AES128_Enc(pt);  for (uint8_t i = 0; i < 16; i++){ \
+ 184:.././hal/hal.h ****                                     AES_STATE = *(pt+i); \
+ 185:.././hal/hal.h ****                                 } \
+ 186:.././hal/hal.h ****                                   \
+ 187:.././hal/hal.h ****                                 AES_CTRL |= 1<<AES_REQUEST; \
+ 188:.././hal/hal.h ****                                   \
+ 189:.././hal/hal.h ****                                 /*Wait for done  */ \
+ 190:.././hal/hal.h ****                                 while ((AES_STATUS & (1<<AES_DONE)) == 0){ \
+ 191:.././hal/hal.h ****                                     ; \
+ 192:.././hal/hal.h ****                                 } \
+ 193:.././hal/hal.h ****                                   \
+ 194:.././hal/hal.h ****                                 for (uint8_t i = 0; i < 16; i++){ \
+ 195:.././hal/hal.h ****                                     *(pt+i) = AES_STATE; \
+ 196:.././hal/hal.h ****                                 }
+ 197:.././hal/hal.h ****     
+ 198:.././hal/hal.h **** #endif
+ 199:.././hal/hal.h **** 
+ 200:.././hal/hal.h **** __attribute__((weak)) void led_ok(unsigned int status)
+ 201:.././hal/hal.h **** {
+ 297              		.loc 2 201 1 is_stmt 1 view -0
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 0
+ 300              		@ frame_needed = 0, uses_anonymous_args = 0
+ 301              		@ link register save eliminated.
+ 202:.././hal/hal.h **** }
+ 302              		.loc 2 202 1 view .LVU71
+ 303 0000 7047     		bx	lr
+ 304              		.cfi_endproc
+ 305              	.LFE0:
+ 307              		.section	.text.led_error,"ax",%progbits
+ 308              		.align	1
+ 309              		.weak	led_error
+ 310              		.syntax unified
+ 311              		.thumb
+ 312              		.thumb_func
+ 313              		.fpu softvfp
+ 315              	led_error:
+ 316              	.LFB8:
+ 317              		.cfi_startproc
+ 318              		@ args = 0, pretend = 0, frame = 0
+ 319              		@ frame_needed = 0, uses_anonymous_args = 0
+ 320              		@ link register save eliminated.
+ 321 0000 7047     		bx	lr
+ 322              		.cfi_endproc
+ 323              	.LFE8:
+ 325              		.section	.text.infinite_loop,"ax",%progbits
+ 326              		.align	1
+ 327              		.global	infinite_loop
+ 328              		.syntax unified
+ 329              		.thumb
+ 330              		.thumb_func
+ 331              		.fpu softvfp
+ 333              	infinite_loop:
+ 334              	.LVL21:
+ 335              	.LFB5:
+  99:simpleserial-glitch.c **** 
+ 100:simpleserial-glitch.c **** #if SS_VER == SS_VER_2_1
+ 101:simpleserial-glitch.c **** uint8_t infinite_loop(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t* in)
+ 102:simpleserial-glitch.c **** #else
+ 103:simpleserial-glitch.c **** uint8_t infinite_loop(uint8_t* in, uint8_t len)
+ 104:simpleserial-glitch.c **** #endif
+ 105:simpleserial-glitch.c **** {
+ 336              		.loc 1 105 1 view -0
+ 337              		.cfi_startproc
+ 338              		@ args = 0, pretend = 0, frame = 8
+ 339              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106:simpleserial-glitch.c ****     led_ok(1);
+ 340              		.loc 1 106 5 view .LVU73
+ 105:simpleserial-glitch.c ****     led_ok(1);
+ 341              		.loc 1 105 1 is_stmt 0 view .LVU74
+ 342 0000 07B5     		push	{r0, r1, r2, lr}
+ 343              	.LCFI7:
+ 344              		.cfi_def_cfa_offset 16
+ 345              		.cfi_offset 14, -4
+ 346              		.loc 1 106 5 view .LVU75
+ 347 0002 0120     		movs	r0, #1
+ 348              	.LVL22:
+ 349              		.loc 1 106 5 view .LVU76
+ 350 0004 FFF7FEFF 		bl	led_ok
+ 351              	.LVL23:
+ 107:simpleserial-glitch.c ****     led_error(0);
+ 352              		.loc 1 107 5 is_stmt 1 view .LVU77
+ 353 0008 0020     		movs	r0, #0
+ 354 000a FFF7FEFF 		bl	led_error
+ 355              	.LVL24:
+ 108:simpleserial-glitch.c **** 
+ 109:simpleserial-glitch.c ****     //Some fake variable
+ 110:simpleserial-glitch.c ****     volatile uint8_t a = 0;
+ 356              		.loc 1 110 5 view .LVU78
+ 357              		.loc 1 110 22 is_stmt 0 view .LVU79
+ 358 000e 0023     		movs	r3, #0
+ 359 0010 8DF80730 		strb	r3, [sp, #7]
+ 111:simpleserial-glitch.c **** 
+ 112:simpleserial-glitch.c ****     //External trigger logic
+ 113:simpleserial-glitch.c ****     trigger_high();
+ 360              		.loc 1 113 5 is_stmt 1 view .LVU80
+ 361 0014 FFF7FEFF 		bl	trigger_high
+ 362              	.LVL25:
+ 114:simpleserial-glitch.c ****     trigger_low();
+ 363              		.loc 1 114 5 view .LVU81
+ 364 0018 FFF7FEFF 		bl	trigger_low
+ 365              	.LVL26:
+ 115:simpleserial-glitch.c **** 
+ 116:simpleserial-glitch.c ****     //Should be an infinite loop
+ 117:simpleserial-glitch.c ****     while(a != 2){
+ 366              		.loc 1 117 5 view .LVU82
+ 367              	.L22:
+ 118:simpleserial-glitch.c ****     ;
+ 368              		.loc 1 118 5 discriminator 1 view .LVU83
+ 117:simpleserial-glitch.c ****     ;
+ 369              		.loc 1 117 10 discriminator 1 view .LVU84
+ 117:simpleserial-glitch.c ****     ;
+ 370              		.loc 1 117 13 is_stmt 0 discriminator 1 view .LVU85
+ 371 001c 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 117:simpleserial-glitch.c ****     ;
+ 372              		.loc 1 117 10 discriminator 1 view .LVU86
+ 373 0020 022B     		cmp	r3, #2
+ 374 0022 FBD1     		bne	.L22
+ 119:simpleserial-glitch.c ****     }
+ 120:simpleserial-glitch.c **** 
+ 121:simpleserial-glitch.c ****     led_error(1);
+ 375              		.loc 1 121 5 is_stmt 1 view .LVU87
+ 376 0024 0120     		movs	r0, #1
+ 377 0026 FFF7FEFF 		bl	led_error
+ 378              	.LVL27:
+ 122:simpleserial-glitch.c ****     led_error(1);
+ 379              		.loc 1 122 5 view .LVU88
+ 380 002a 0120     		movs	r0, #1
+ 381 002c FFF7FEFF 		bl	led_error
+ 382              	.LVL28:
+ 123:simpleserial-glitch.c ****     led_error(1);
+ 383              		.loc 1 123 5 view .LVU89
+ 384 0030 0120     		movs	r0, #1
+ 385 0032 FFF7FEFF 		bl	led_error
+ 386              	.LVL29:
+ 124:simpleserial-glitch.c ****     led_error(1);
+ 387              		.loc 1 124 5 view .LVU90
+ 388 0036 0120     		movs	r0, #1
+ 389 0038 FFF7FEFF 		bl	led_error
+ 390              	.LVL30:
+ 125:simpleserial-glitch.c ****     led_error(1);
+ 391              		.loc 1 125 5 view .LVU91
+ 392 003c 0120     		movs	r0, #1
+ 393 003e FFF7FEFF 		bl	led_error
+ 394              	.LVL31:
+ 126:simpleserial-glitch.c ****     led_error(1);
+ 395              		.loc 1 126 5 view .LVU92
+ 396 0042 0120     		movs	r0, #1
+ 397 0044 FFF7FEFF 		bl	led_error
+ 398              	.LVL32:
+ 127:simpleserial-glitch.c ****     led_error(1);
+ 399              		.loc 1 127 5 view .LVU93
+ 400 0048 0120     		movs	r0, #1
+ 401 004a FFF7FEFF 		bl	led_error
+ 402              	.LVL33:
+ 128:simpleserial-glitch.c ****     led_error(1);
+ 403              		.loc 1 128 5 view .LVU94
+ 404 004e 0120     		movs	r0, #1
+ 405 0050 FFF7FEFF 		bl	led_error
+ 406              	.LVL34:
+ 129:simpleserial-glitch.c ****     led_error(1);
+ 407              		.loc 1 129 5 view .LVU95
+ 408 0054 0120     		movs	r0, #1
+ 409 0056 FFF7FEFF 		bl	led_error
+ 410              	.LVL35:
+ 130:simpleserial-glitch.c **** 
+ 131:simpleserial-glitch.c ****     putch('r');
+ 411              		.loc 1 131 5 view .LVU96
+ 412 005a 7220     		movs	r0, #114
+ 413 005c FFF7FEFF 		bl	putch
+ 414              	.LVL36:
+ 132:simpleserial-glitch.c ****     putch('B');
+ 415              		.loc 1 132 5 view .LVU97
+ 416 0060 4220     		movs	r0, #66
+ 417 0062 FFF7FEFF 		bl	putch
+ 418              	.LVL37:
+ 133:simpleserial-glitch.c ****     putch('R');
+ 419              		.loc 1 133 5 view .LVU98
+ 420 0066 5220     		movs	r0, #82
+ 421 0068 FFF7FEFF 		bl	putch
+ 422              	.LVL38:
+ 134:simpleserial-glitch.c ****     putch('E');
+ 423              		.loc 1 134 5 view .LVU99
+ 424 006c 4520     		movs	r0, #69
+ 425 006e FFF7FEFF 		bl	putch
+ 426              	.LVL39:
+ 135:simpleserial-glitch.c ****     putch('A');
+ 427              		.loc 1 135 5 view .LVU100
+ 428 0072 4120     		movs	r0, #65
+ 429 0074 FFF7FEFF 		bl	putch
+ 430              	.LVL40:
+ 136:simpleserial-glitch.c ****     putch('K');
+ 431              		.loc 1 136 5 view .LVU101
+ 432 0078 4B20     		movs	r0, #75
+ 433 007a FFF7FEFF 		bl	putch
+ 434              	.LVL41:
+ 137:simpleserial-glitch.c ****     putch('O');
+ 435              		.loc 1 137 5 view .LVU102
+ 436 007e 4F20     		movs	r0, #79
+ 437 0080 FFF7FEFF 		bl	putch
+ 438              	.LVL42:
+ 138:simpleserial-glitch.c ****     putch('U');
+ 439              		.loc 1 138 5 view .LVU103
+ 440 0084 5520     		movs	r0, #85
+ 441 0086 FFF7FEFF 		bl	putch
+ 442              	.LVL43:
+ 139:simpleserial-glitch.c ****     putch('T');
+ 443              		.loc 1 139 5 view .LVU104
+ 444 008a 5420     		movs	r0, #84
+ 445 008c FFF7FEFF 		bl	putch
+ 446              	.LVL44:
+ 140:simpleserial-glitch.c ****     putch('\n');
+ 447              		.loc 1 140 5 view .LVU105
+ 448 0090 0A20     		movs	r0, #10
+ 449 0092 FFF7FEFF 		bl	putch
+ 450              	.LVL45:
+ 141:simpleserial-glitch.c **** 
+ 142:simpleserial-glitch.c ****     led_error(1);
+ 451              		.loc 1 142 5 view .LVU106
+ 452 0096 0120     		movs	r0, #1
+ 453 0098 FFF7FEFF 		bl	led_error
+ 454              	.LVL46:
+ 143:simpleserial-glitch.c ****     led_error(1);
+ 455              		.loc 1 143 5 view .LVU107
+ 456 009c 0120     		movs	r0, #1
+ 457 009e FFF7FEFF 		bl	led_error
+ 458              	.LVL47:
+ 144:simpleserial-glitch.c ****     led_error(1);
+ 459              		.loc 1 144 5 view .LVU108
+ 460 00a2 0120     		movs	r0, #1
+ 461 00a4 FFF7FEFF 		bl	led_error
+ 462              	.LVL48:
+ 145:simpleserial-glitch.c ****     led_error(1);
+ 463              		.loc 1 145 5 view .LVU109
+ 464 00a8 0120     		movs	r0, #1
+ 465 00aa FFF7FEFF 		bl	led_error
+ 466              	.LVL49:
+ 146:simpleserial-glitch.c ****     led_error(1);
+ 467              		.loc 1 146 5 view .LVU110
+ 468 00ae 0120     		movs	r0, #1
+ 469 00b0 FFF7FEFF 		bl	led_error
+ 470              	.LVL50:
+ 147:simpleserial-glitch.c ****     led_error(1);
+ 471              		.loc 1 147 5 view .LVU111
+ 472 00b4 0120     		movs	r0, #1
+ 473 00b6 FFF7FEFF 		bl	led_error
+ 474              	.LVL51:
+ 148:simpleserial-glitch.c ****     led_error(1);
+ 475              		.loc 1 148 5 view .LVU112
+ 476 00ba 0120     		movs	r0, #1
+ 477 00bc FFF7FEFF 		bl	led_error
+ 478              	.LVL52:
+ 149:simpleserial-glitch.c ****     led_error(1);
+ 479              		.loc 1 149 5 view .LVU113
+ 480 00c0 0120     		movs	r0, #1
+ 481 00c2 FFF7FEFF 		bl	led_error
+ 482              	.LVL53:
+ 150:simpleserial-glitch.c **** 
+ 151:simpleserial-glitch.c ****     return 0;
+ 483              		.loc 1 151 5 view .LVU114
+ 152:simpleserial-glitch.c **** }
+ 484              		.loc 1 152 1 is_stmt 0 view .LVU115
+ 485 00c6 0020     		movs	r0, #0
+ 486 00c8 03B0     		add	sp, sp, #12
+ 487              	.LCFI8:
+ 488              		.cfi_def_cfa_offset 4
+ 489              		@ sp needed
+ 490 00ca 5DF804FB 		ldr	pc, [sp], #4
+ 491              		.cfi_endproc
+ 492              	.LFE5:
+ 494              		.section	.text.startup.main,"ax",%progbits
+ 495              		.align	1
+ 496              		.global	main
+ 497              		.syntax unified
+ 498              		.thumb
+ 499              		.thumb_func
+ 500              		.fpu softvfp
+ 502              	main:
+ 503              	.LFB6:
+ 153:simpleserial-glitch.c **** 
+ 154:simpleserial-glitch.c **** // #pragma GCC pop_options
+ 155:simpleserial-glitch.c **** 
+ 156:simpleserial-glitch.c **** int main(void)
+ 157:simpleserial-glitch.c **** {
+ 504              		.loc 1 157 1 is_stmt 1 view -0
+ 505              		.cfi_startproc
+ 506              		@ Volatile: function does not return.
+ 507              		@ args = 0, pretend = 0, frame = 0
+ 508              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158:simpleserial-glitch.c ****     platform_init();
+ 509              		.loc 1 158 5 view .LVU117
+ 157:simpleserial-glitch.c ****     platform_init();
+ 510              		.loc 1 157 1 is_stmt 0 view .LVU118
+ 511 0000 08B5     		push	{r3, lr}
+ 512              	.LCFI9:
+ 513              		.cfi_def_cfa_offset 8
+ 514              		.cfi_offset 3, -8
+ 515              		.cfi_offset 14, -4
+ 516              		.loc 1 158 5 view .LVU119
+ 517 0002 FFF7FEFF 		bl	platform_init
+ 518              	.LVL54:
+ 159:simpleserial-glitch.c ****     init_uart();
+ 519              		.loc 1 159 5 is_stmt 1 view .LVU120
+ 520 0006 FFF7FEFF 		bl	init_uart
+ 521              	.LVL55:
+ 160:simpleserial-glitch.c ****     trigger_setup();
+ 522              		.loc 1 160 5 view .LVU121
+ 523 000a FFF7FEFF 		bl	trigger_setup
+ 524              	.LVL56:
+ 161:simpleserial-glitch.c **** 
+ 162:simpleserial-glitch.c ****     /* Device reset detected */
+ 163:simpleserial-glitch.c ****     putch('r');
+ 525              		.loc 1 163 5 view .LVU122
+ 526 000e 7220     		movs	r0, #114
+ 527 0010 FFF7FEFF 		bl	putch
+ 528              	.LVL57:
+ 164:simpleserial-glitch.c ****     putch('R');
+ 529              		.loc 1 164 5 view .LVU123
+ 530 0014 5220     		movs	r0, #82
+ 531 0016 FFF7FEFF 		bl	putch
+ 532              	.LVL58:
+ 165:simpleserial-glitch.c ****     putch('E');
+ 533              		.loc 1 165 5 view .LVU124
+ 534 001a 4520     		movs	r0, #69
+ 535 001c FFF7FEFF 		bl	putch
+ 536              	.LVL59:
+ 166:simpleserial-glitch.c ****     putch('S');
+ 537              		.loc 1 166 5 view .LVU125
+ 538 0020 5320     		movs	r0, #83
+ 539 0022 FFF7FEFF 		bl	putch
+ 540              	.LVL60:
+ 167:simpleserial-glitch.c ****     putch('E');
+ 541              		.loc 1 167 5 view .LVU126
+ 542 0026 4520     		movs	r0, #69
+ 543 0028 FFF7FEFF 		bl	putch
+ 544              	.LVL61:
+ 168:simpleserial-glitch.c ****     putch('T');
+ 545              		.loc 1 168 5 view .LVU127
+ 546 002c 5420     		movs	r0, #84
+ 547 002e FFF7FEFF 		bl	putch
+ 548              	.LVL62:
+ 169:simpleserial-glitch.c ****     putch(' ');
+ 549              		.loc 1 169 5 view .LVU128
+ 550 0032 2020     		movs	r0, #32
+ 551 0034 FFF7FEFF 		bl	putch
+ 552              	.LVL63:
+ 170:simpleserial-glitch.c ****     putch(' ');
+ 553              		.loc 1 170 5 view .LVU129
+ 554 0038 2020     		movs	r0, #32
+ 555 003a FFF7FEFF 		bl	putch
+ 556              	.LVL64:
+ 171:simpleserial-glitch.c ****     putch(' ');
+ 557              		.loc 1 171 5 view .LVU130
+ 558 003e 2020     		movs	r0, #32
+ 559 0040 FFF7FEFF 		bl	putch
+ 560              	.LVL65:
+ 172:simpleserial-glitch.c ****     putch('\n');
+ 561              		.loc 1 172 5 view .LVU131
+ 562 0044 0A20     		movs	r0, #10
+ 563 0046 FFF7FEFF 		bl	putch
+ 564              	.LVL66:
+ 173:simpleserial-glitch.c **** 
+ 174:simpleserial-glitch.c ****     simpleserial_init();
+ 565              		.loc 1 174 5 view .LVU132
+ 566 004a FFF7FEFF 		bl	simpleserial_init
+ 567              	.LVL67:
+ 175:simpleserial-glitch.c ****     simpleserial_addcmd('g', 0, glitch_loop);
+ 568              		.loc 1 175 5 view .LVU133
+ 569 004e 0B4A     		ldr	r2, .L26
+ 570 0050 0021     		movs	r1, #0
+ 571 0052 6720     		movs	r0, #103
+ 572 0054 FFF7FEFF 		bl	simpleserial_addcmd
+ 573              	.LVL68:
+ 176:simpleserial-glitch.c ****     simpleserial_addcmd('c', 1, glitch_comparison);
+ 574              		.loc 1 176 5 view .LVU134
+ 575 0058 094A     		ldr	r2, .L26+4
+ 576 005a 0121     		movs	r1, #1
+ 577 005c 6320     		movs	r0, #99
+ 578 005e FFF7FEFF 		bl	simpleserial_addcmd
+ 579              	.LVL69:
+ 177:simpleserial-glitch.c ****     #if SS_VER == SS_VER_2_1
+ 178:simpleserial-glitch.c ****     simpleserial_addcmd(0x01, 5, password);
+ 580              		.loc 1 178 5 view .LVU135
+ 581 0062 084A     		ldr	r2, .L26+8
+ 582 0064 0521     		movs	r1, #5
+ 583 0066 0120     		movs	r0, #1
+ 584 0068 FFF7FEFF 		bl	simpleserial_addcmd
+ 585              	.LVL70:
+ 179:simpleserial-glitch.c ****     #else
+ 180:simpleserial-glitch.c ****     simpleserial_addcmd('p', 5, password);
+ 181:simpleserial-glitch.c ****     #endif
+ 182:simpleserial-glitch.c ****     simpleserial_addcmd('i', 0, infinite_loop);
+ 586              		.loc 1 182 5 view .LVU136
+ 587 006c 064A     		ldr	r2, .L26+12
+ 588 006e 0021     		movs	r1, #0
+ 589 0070 6920     		movs	r0, #105
+ 590 0072 FFF7FEFF 		bl	simpleserial_addcmd
+ 591              	.LVL71:
+ 592              	.L25:
+ 183:simpleserial-glitch.c ****     while(1)
+ 593              		.loc 1 183 5 discriminator 1 view .LVU137
+ 184:simpleserial-glitch.c ****         simpleserial_get();
+ 594              		.loc 1 184 9 discriminator 1 view .LVU138
+ 595 0076 FFF7FEFF 		bl	simpleserial_get
+ 596              	.LVL72:
+ 183:simpleserial-glitch.c ****     while(1)
+ 597              		.loc 1 183 10 discriminator 1 view .LVU139
+ 598 007a FCE7     		b	.L25
+ 599              	.L27:
+ 600              		.align	2
+ 601              	.L26:
+ 602 007c 00000000 		.word	glitch_loop
+ 603 0080 00000000 		.word	glitch_comparison
+ 604 0084 00000000 		.word	password
+ 605 0088 00000000 		.word	infinite_loop
+ 606              		.cfi_endproc
+ 607              	.LFE6:
+ 609              		.text
+ 610              	.Letext0:
+ 611              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 612              		.file 4 ".././hal/stm32f4/stm32f4_hal.h"
+ 613              		.file 5 ".././simpleserial/simpleserial.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 simpleserial-glitch.c
+     /tmp/cceRhqCP.s:16     .text.glitch_loop:0000000000000000 $t
+     /tmp/cceRhqCP.s:24     .text.glitch_loop:0000000000000000 glitch_loop
+     /tmp/cceRhqCP.s:120    .text.glitch_comparison:0000000000000000 $t
+     /tmp/cceRhqCP.s:127    .text.glitch_comparison:0000000000000000 glitch_comparison
+     /tmp/cceRhqCP.s:183    .text.password:0000000000000000 $t
+     /tmp/cceRhqCP.s:190    .text.password:0000000000000000 password
+     /tmp/cceRhqCP.s:281    .text.password:0000000000000058 $d
+     /tmp/cceRhqCP.s:286    .text.led_ok:0000000000000000 $t
+     /tmp/cceRhqCP.s:293    .text.led_ok:0000000000000000 led_ok
+     /tmp/cceRhqCP.s:308    .text.led_error:0000000000000000 $t
+     /tmp/cceRhqCP.s:315    .text.led_error:0000000000000000 led_error
+     /tmp/cceRhqCP.s:326    .text.infinite_loop:0000000000000000 $t
+     /tmp/cceRhqCP.s:333    .text.infinite_loop:0000000000000000 infinite_loop
+     /tmp/cceRhqCP.s:495    .text.startup.main:0000000000000000 $t
+     /tmp/cceRhqCP.s:502    .text.startup.main:0000000000000000 main
+     /tmp/cceRhqCP.s:602    .text.startup.main:000000000000007c $d
+
+UNDEFINED SYMBOLS
+trigger_high
+trigger_low
+simpleserial_put
+putch
+platform_init
+init_uart
+trigger_setup
+simpleserial_init
+simpleserial_addcmd
+simpleserial_get

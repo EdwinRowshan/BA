@@ -98,7 +98,7 @@ uint8_t ss_get_commands(uint8_t cmd, uint8_t scmd, uint8_t len, uint8_t *data)
         cmd_chars[i] = commands[i].c;
     }
 
-    simpleserial_put('r', num_commands & 0xFF, (void *)cmd_chars);
+    simpleserial_put('r', num_commands & 0xFF, (uint8_t*)cmd_chars);
     return 0x00;
 
 }
@@ -162,6 +162,10 @@ void simpleserial_get(void)
 {
 	uint8_t data_buf[MAX_SS_LEN];
 	uint8_t err = 0;
+	uint8_t next_frame;
+        uint8_t crc;
+        uint8_t c;
+        int i;
 
 	for (int i = 0; i < 4; i++) {
 		data_buf[i] = getch(); //PTR, cmd, scmd, len
@@ -170,10 +174,10 @@ void simpleserial_get(void)
 			goto ERROR;
 		}
 	}
-	uint8_t next_frame = unstuff_data(data_buf, 4);
+	next_frame = unstuff_data(data_buf, 4);
 
 	// check for valid command
-	uint8_t c = 0;
+	c = 0;
 	for(c = 0; c < num_commands; c++)
 	{
 		if(commands[c].c == data_buf[1])
@@ -194,7 +198,7 @@ void simpleserial_get(void)
 
 	// read in data
 	// eq to len + crc + frame end
-	int i = 4;
+	i = 4;
 	for (; i < data_buf[3] + 5; i++) {
 		data_buf[i] = getch();
 		if (data_buf[i] == FRAME_BYTE) {
@@ -214,7 +218,7 @@ void simpleserial_get(void)
 	unstuff_data(data_buf + next_frame, i - next_frame + 1);
 
 	//calc crc excluding original frame offset and frame end and crc
-	uint8_t crc = ss_crc(data_buf+1, i-2);
+	crc = ss_crc(data_buf+1, i-2);
 	if (crc != data_buf[i-1]) {
 		err = SS_ERR_CRC;
 		goto ERROR;
@@ -285,7 +289,7 @@ uint8_t ss_get_commands(uint8_t *x, uint8_t len)
         repr_cmd_buf[i].flags = commands[i].flags;
     }
 
-    simpleserial_put('r', num_commands * 0x03, (void *) repr_cmd_buf);
+    simpleserial_put('r', num_commands * 0x03, (uint8_t*) repr_cmd_buf);
     return 0x00;
 }
 
