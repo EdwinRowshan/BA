@@ -1,14 +1,3 @@
-SCOPETYPE = 'OPENADC'
-PLATFORM= 'CW308_STM32F4'
-SS_VER = 'SS_VER_2_1'
-
-%run "../../chipwhisperer-jupyter/Setup_Scripts/Setup_Generic.ipynb"
-%%bash -s "$PLATFORM" "$SS_VER"
-cd ./firmware/XTS
-make PLATFORM=$1 CRYPTO_TARGET=NONE SS_VER=$2 -j
-
-cw.program_target(scope, prog, "./firmware/XTS/main-{}.hex".format(PLATFORM))
-
 import chipwhisperer as cw
 import matplotlib.pyplot as plt
 from tqdm import trange
