@@ -1,9 +1,21 @@
-# BA
+XTS-AES Power Analysis (Final)
 
-Bachelor of Science Computer Science (TU Berlin) 
+In fulfillment for the requirements of the degree 'Bachelor of Science' in Computer Science (Informatik) at TU Berlin under StuPO 2015. 
 
-Thesis: Breaking XTS-AES Encryption via Side Channel Attack: Power Analysis on Horizontal Modular Multiplication
+This repository contains the files related to my work. The project includes modified XTS firmware, analysis scripts, and trace collection utilities.
 
-In the file FULL_ATTACK.py you will find all the relevant information (that and reading my thesis ofc). The firmware folder contains a folder named XTS, where the actual XTS-AES implementation resides, the main.cpp can be modified for different tweaks and the GF128.cpp contains the actual horizontal modular multiplication (tweak updating) itself which can also be tweaked in numerous ways such as introducing a counter method. The .npy files are all the traces I took and saved during the entire process and two of them specifically are used in the attack (yes.npy, no.npy).
+Structure
+XTS/: Contains modified firmware files for XTS-AES implementation on STM32F4. NEEDS TO BE PLACED INSIDE FIRMWARE FOLDER OF CHIPWHISPERER (See CW GitHub).
+traces/: Contains power traces used for analysis as well as the reference traces for our analysis to work (Cross Correlation Analysis)
 
-As for the attack itself, _128Analyze will spit out the reconstruction array, you need to hammer this into reconstruct_T0 which will then deliver the original T_0 value. I'm pretty sure you can modify it so that it directly saves it as an array or whatever, but alas my hands are tied and I can no longer bear the burden of having to deal with any of this anymore. single_segment delivers a singular tweak update specified by the number and the bigger number indicates how many traces you want averaged to reduce noise or whatever. (The program works even if you use a singular trace instead of averaging out idk 500 or sum). 
+FULL_ATTACK.py: Main script for conducting the power analysis attack.
+trace_script.py: Helper script to generate SVGs for our work. 
+verifyTweak.py: Script used for verifying the correct tweak value and also aided us during the process.
+Usage
+preliminary: Contains all the code that needs to be run BEFORE anything happens (Do this after you connected your hardware).
+
+Attack Execution: _128Analyze() will generate the reconstruction array. This needs to be saved (however you see fit) and then feed this value the function reconstruct_T0() which will then deliver the accurately rebuilt tweak T_0. 
+
+The two folders contain empty files named FINAL so that I could easily get the final commit message as the main message for the overview. 
+
+For more details, please refer to the thesis itself (I'm not sure if I can upload it here, request it by mail edwinrowshan@gmail.com).  
