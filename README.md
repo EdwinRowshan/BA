@@ -14,6 +14,8 @@ verifyTweak.py: Script used for verifying the correct tweak value and also aided
 Usage
 preliminary: Contains all the code that needs to be run BEFORE anything happens (Do this after you connected your hardware).
 
+Make files had to be modified but are also provided, the concrete directory structure of that can be inferred from looking at the firmware folder (and hal) on the CW GitHub. 
+
 Attack Execution: _128Analyze() will generate the reconstruction array. This needs to be saved (however you see fit) and then feed this value the function reconstruct_T0() which will then deliver the accurately rebuilt tweak T_0. 
 
 The two folders contain empty files named FINAL so that I could easily get the final commit message as the main message for the overview. 
