@@ -4,6 +4,8 @@ In fulfillment for the requirements of the degree 'Bachelor of Science' in Compu
 
 This repository contains the files related to my work. The project includes modified XTS firmware, analysis scripts, and trace collection utilities.
 
+Hardware: ChipWhisperer Lite, UFO Board and the respective STM32F Board.
+
 Structure
 XTS/: Contains modified firmware files for XTS-AES implementation on STM32F4. NEEDS TO BE PLACED INSIDE FIRMWARE FOLDER OF CHIPWHISPERER (See CW GitHub).
 traces/: Contains power traces used for analysis as well as the reference traces for our analysis to work (Cross Correlation Analysis)
